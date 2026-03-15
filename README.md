@@ -24,16 +24,19 @@ API RESTful para o sistema de gerenciamento de produção da Saboraki. Este back
 
 1. Clone este repositório
 2. Instale as dependências:
+
 ```bash
 npm install
 ```
 
 3. Crie um arquivo `.env` baseado no `.env.exemple`:
+
 ```bash
 cp .env.exemple .env
 ```
 
 4. Configure as variáveis de ambiente no arquivo `.env`:
+
 ```
 PORT=3000
 EMAIL_USER=seu_email@gmail.com
@@ -43,6 +46,7 @@ MONGO_URI=mongodb://127.0.0.1:27017/saboraki
 ```
 
 5. Inicie o servidor:
+
 ```bash
 npm start
 ```
@@ -53,10 +57,12 @@ O servidor rodará na porta 3000 (ou na porta definida na variável `PORT`).
 
 ### Autenticação (`/auth`)
 
-#### POST `/auth/login`
+#### **POST** `/auth/login`
+
 Realiza login de usuário e retorna um token JWT.
 
 **Corpo da requisição:**
+
 ```json
 {
   "email": "usuario@exemplo.com",
@@ -65,6 +71,7 @@ Realiza login de usuário e retorna um token JWT.
 ```
 
 **Resposta de sucesso:**
+
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
@@ -72,16 +79,19 @@ Realiza login de usuário e retorna um token JWT.
 ```
 
 **Resposta de erro (401):**
+
 ```json
 {
   "mensagem": "Email ou senha inválidos"
 }
 ```
 
-#### POST `/auth/register`
+#### **POST** `/auth/register`
+
 Cadastra um novo usuário no sistema.
 
 **Corpo da requisição:**
+
 ```json
 {
   "nome": "Nome do Usuário",
@@ -91,6 +101,7 @@ Cadastra um novo usuário no sistema.
 ```
 
 **Resposta de sucesso:**
+
 ```json
 {
   "mensagem": "Usuário criado com sucesso"
@@ -98,6 +109,7 @@ Cadastra um novo usuário no sistema.
 ```
 
 **Resposta de erro (400):**
+
 ```json
 {
   "mensagem": "Usuário já existe"
@@ -106,10 +118,12 @@ Cadastra um novo usuário no sistema.
 
 ### Produção (`/producao`)
 
-#### POST `/producao/enviar-email`
+#### **POST** `/producao/enviar-email`
+
 Envia um relatório de produção por e-mail com todos os dados formatados em HTML.
 
 **Corpo da requisição:**
+
 ```json
 {
   "operador": "Nome do Operador",
@@ -139,6 +153,7 @@ Envia um relatório de produção por e-mail com todos os dados formatados em HT
 ```
 
 **Resposta de sucesso:**
+
 ```json
 {
   "mensagem": "Email enviado com sucesso!"
@@ -146,6 +161,7 @@ Envia um relatório de produção por e-mail com todos os dados formatados em HT
 ```
 
 **Resposta de erro (500):**
+
 ```json
 {
   "erro": "Erro ao enviar email"
@@ -155,6 +171,7 @@ Envia um relatório de produção por e-mail com todos os dados formatados em HT
 ## 🗄️ Modelo de Dados
 
 ### User
+
 ```javascript
 {
   nome: String (obrigatório),
