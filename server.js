@@ -29,8 +29,9 @@ app.use(
 );
 
 // Manipulador para preflight requests
-app.options("/auth/*", cors());
-app.options("/producao/*", cors());
+app.options("/auth/login", cors());
+app.options("/auth/register", cors());
+app.options("/producao", cors());
 app.options("/health", cors());
 
 conectarDB();
