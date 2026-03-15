@@ -10,7 +10,12 @@ const producaoRoutes = require("./routes/producao");
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://saboraki.netlify.app",
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 conectarDB();
