@@ -28,8 +28,10 @@ app.use(
   }),
 );
 
-// Manipulador explícito para preflight requests
-app.options("*", cors());
+// Manipulador para preflight requests
+app.options("/auth/*", cors());
+app.options("/producao/*", cors());
+app.options("/health", cors());
 
 conectarDB();
 
