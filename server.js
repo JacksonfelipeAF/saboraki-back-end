@@ -10,9 +10,6 @@ const producaoRoutes = require("./routes/producao");
 
 const app = express();
 
-// Middleware JSON deve vir antes do CORS para Express 5
-app.use(express.json());
-
 app.use(
   cors({
     origin: [
@@ -21,25 +18,18 @@ app.use(
       "http://localhost:5173",
     ],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
   }),
 );
 
-// Manipulador para preflight requests
-app.options("/auth/login", cors());
-app.options("/auth/register", cors());
-app.options("/producao", cors());
-app.options("/health", cors());
+app.options("*", cors());
+
+app.use(express.json());
 
 conectarDB();
 
 app.use("/auth", authRoutes);
 app.use("/producao", producaoRoutes);
 
-// Health check route...
 app.get("/health", (req, res) => {
   res.status(200).json({
     status: "OK",
