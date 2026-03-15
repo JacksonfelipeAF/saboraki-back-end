@@ -18,7 +18,7 @@ conectarDB();
 app.use("/auth", authRoutes);
 app.use("/producao", producaoRoutes);
 
-// Health check route
+// Health check route...
 app.get("/health", (req, res) => {
   res.status(200).json({
     status: "OK",
