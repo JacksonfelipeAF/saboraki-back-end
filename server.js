@@ -40,7 +40,7 @@ app.use("/producao", producaoRoutes);
 app.use("/users", usersRoutes);
 
 app.get("/health", (req, res) => {
-  res.json({ status: "OK" });
+  res.json({ status: "OK..." });
 });
 
 app.listen(process.env.PORT || 3000, () => {
