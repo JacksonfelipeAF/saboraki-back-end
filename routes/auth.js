@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const router = express.Router();
 
-const User = require("../models/User");
+const User = require("../models/user");
 
 // LOGIN
 router.post("/login", async (req, res) => {
@@ -17,6 +17,7 @@ router.post("/login", async (req, res) => {
     }
 
     const senhaValida = await bcrypt.compare(senha, user.senha);
+    console.log("senhaValida ?", senhaValida);
 
     if (!senhaValida) {
       return res.status(401).json({ mensagem: "Email ou senha inválidos" });
