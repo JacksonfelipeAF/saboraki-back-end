@@ -7,6 +7,7 @@ const conectarDB = require("./config/db");
 
 const authRoutes = require("./routes/auth");
 const producaoRoutes = require("./routes/producao");
+const usersRoutes = require("./routes/users");
 
 const app = express();
 
@@ -36,6 +37,7 @@ conectarDB();
 
 app.use("/auth", authRoutes);
 app.use("/producao", producaoRoutes);
+app.use("/users", usersRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ status: "OK" });

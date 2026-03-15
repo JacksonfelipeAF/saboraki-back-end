@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const nodemailer = require("nodemailer");
+const autenticarToken = require("../middlewares/autenticarToken");
 
-router.post("/enviar-email", async (req, res) => {
+router.post("/enviar-email", autenticarToken, async (req, res) => {
   const {
     operador,
     data,
