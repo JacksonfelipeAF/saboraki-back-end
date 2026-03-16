@@ -17,9 +17,25 @@ router.post("/enviar-email", autenticarToken, async (req, res) => {
     somaPreforma, // soma da perda pré-forma do dashboard
     somaGarrafa, // soma da perda garrafa do dashboard
     tabela, // array com todas as linhas
+    emailDestino, // email de destino vindo do frontend
   } = req.body;
 
   try {
+    // Verificar se as variáveis de ambiente estão configuradas
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error(
+        "Variáveis de ambiente EMAIL_USER ou EMAIL_PASS não configuradas",
+      );
+      return res
+        .status(500)
+        .json({ erro: "Configuração de email não encontrada no servidor" });
+    }
+
+    // Verificar se o emailDestino foi fornecido
+    if (!emailDestino) {
+      return res.status(400).json({ erro: "Email de destino não fornecido" });
+    }
+
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -101,7 +117,7 @@ router.post("/enviar-email", autenticarToken, async (req, res) => {
 
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER, // ou email destino
+      to: emailDestino, // usando o email de destino do frontend
       subject: "Relatório de Produção",
       html: html,
     });
