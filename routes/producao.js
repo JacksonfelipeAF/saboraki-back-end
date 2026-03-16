@@ -1,52 +1,34 @@
 const express = require("express");
 const router = express.Router();
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 const autenticarToken = require("../middlewares/autenticarToken");
 
-router.post("/enviar-email", autenticarToken, async (req, res) => {
-  const {
-    operador,
-    data,
-    turno,
-    maquina,
-    horaInicial,
-    horaFinal,
-    horasTrabalhadas,
-    producaoHora,
-    totalProduzido, // já calculado no dashboard
-    somaPreforma, // soma da perda pré-forma do dashboard
-    somaGarrafa, // soma da perda garrafa do dashboard
-    tabela, // array com todas as linhas
-    emailDestino, // email de destino vindo do frontend
-  } = req.body;
+const resend = new Resend(process.env.RESEND_API_KEY);
 
+router.post("/enviar-email", autenticarToken, async (req, res) => {
   try {
-    // Verificar se as variáveis de ambiente estão configuradas
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      console.error(
-        "Variáveis de ambiente EMAIL_USER ou EMAIL_PASS não configuradas",
-      );
-      return res
-        .status(500)
-        .json({ erro: "Configuração de email não encontrada no servidor" });
-    }
+    const {
+      operador,
+      data,
+      turno,
+      maquina,
+      horaInicial,
+      horaFinal,
+      horasTrabalhadas,
+      producaoHora,
+      totalProduzido,
+      somaPreforma,
+      somaGarrafa,
+      tabela,
+      emailDestino,
+    } = req.body;
 
     // Verificar se o emailDestino foi fornecido
     if (!emailDestino) {
       return res.status(400).json({ erro: "Email de destino não fornecido" });
     }
 
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    // GERAR LINHAS DA TABELA (não recalcula nada)
+    // GERAR LINHAS DA TABELA
     let linhasTabela = "";
     if (tabela && tabela.length > 0) {
       tabela.forEach((item) => {
@@ -64,7 +46,7 @@ router.post("/enviar-email", autenticarToken, async (req, res) => {
         `;
       });
 
-      // LINHA FINAL COM TOTAIS já fornecidos pelo dashboard
+      // LINHA FINAL COM TOTAIS
       linhasTabela += `
         <tr style="font-weight:bold; background:#e0e0e0;">
           <td colspan="3" style="text-align:right;">TOTAL:</td>
@@ -117,16 +99,16 @@ router.post("/enviar-email", autenticarToken, async (req, res) => {
       </div>
     `;
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: emailDestino, // usando o email de destino do frontend
+    await resend.emails.send({
+      from: "Sistema de Produção <onboarding@resend.dev>",
+      to: emailDestino,
       subject: "Relatório de Produção",
       html: html,
     });
 
     res.json({ mensagem: "Email enviado com sucesso!" });
-  } catch (error) {
-    console.error(error);
+  } catch (erro) {
+    console.error(erro);
     res.status(500).json({ erro: "Erro ao enviar email" });
   }
 });
