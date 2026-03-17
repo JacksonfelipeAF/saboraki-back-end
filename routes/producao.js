@@ -7,6 +7,9 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 router.post("/enviar-email", autenticarToken, async (req, res) => {
   try {
+    console.log("=== INÍCIO DO ENVIO DE EMAIL ===");
+    console.log("Dados recebidos:", req.body);
+
     const {
       operador,
       data,
@@ -25,12 +28,17 @@ router.post("/enviar-email", autenticarToken, async (req, res) => {
 
     // Verificar se o emailDestino foi fornecido
     if (!emailDestino) {
+      console.error("Email de destino não fornecido");
       return res.status(400).json({ erro: "Email de destino não fornecido" });
     }
+
+    console.log("Email de destino:", emailDestino);
+    console.log("RESEND_API_KEY existe?", !!process.env.RESEND_API_KEY);
 
     // GERAR LINHAS DA TABELA
     let linhasTabela = "";
     if (tabela && tabela.length > 0) {
+      console.log("Processando tabela com", tabela.length, "linhas");
       tabela.forEach((item) => {
         linhasTabela += `
           <tr>
@@ -56,6 +64,8 @@ router.post("/enviar-email", autenticarToken, async (req, res) => {
           <td colspan="2"></td>
         </tr>
       `;
+    } else {
+      console.log("Nenhuma tabela encontrada ou vazia");
     }
 
     // HTML do e-mail
@@ -99,17 +109,29 @@ router.post("/enviar-email", autenticarToken, async (req, res) => {
       </div>
     `;
 
-    await resend.emails.send({
+    console.log("Enviando email via Resend...");
+
+    const result = await resend.emails.send({
       from: "Sistema de Produção <onboarding@resend.dev>",
       to: emailDestino,
       subject: "Relatório de Produção",
       html: html,
     });
 
+    console.log("Resposta do Resend:", result);
+    console.log("=== EMAIL ENVIADO COM SUCESSO ===");
+
     res.json({ mensagem: "Email enviado com sucesso!" });
   } catch (erro) {
-    console.error(erro);
-    res.status(500).json({ erro: "Erro ao enviar email" });
+    console.error("=== ERRO NO ENVIO DE EMAIL ===");
+    console.error("Erro completo:", erro);
+    console.error("Mensagem do erro:", erro.message);
+    console.error("Stack do erro:", erro.stack);
+
+    res.status(500).json({
+      erro: "Erro ao enviar email",
+      detalhe: erro.message,
+    });
   }
 });
 
