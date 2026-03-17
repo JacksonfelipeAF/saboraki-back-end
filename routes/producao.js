@@ -193,8 +193,7 @@ router.post("/enviar-email", autenticarToken, async (req, res) => {
     console.log("Enviando email via Resend...");
 
     const result = await resend.emails.send({
-      from: "Sistema de Produção <seu_email@seu_dominio.com>",
-
+      from: "onboarding@resend.dev",
       to: emailDestino,
 
       subject: "Relatório de Produção",
