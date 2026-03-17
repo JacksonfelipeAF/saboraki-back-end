@@ -13,7 +13,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://saboraki.netlify.app",
+    origin: ["https://saboraki.netlify.app", "NOVO_DOMINIO_DO_FRONTEND"],
     credentials: true,
   }),
 );
