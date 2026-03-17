@@ -13,7 +13,13 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["https://saboraki.netlify.app", "NOVO_DOMINIO_DO_FRONTEND"],
+    origin: [
+      "https://saboraki.netlify.app",
+      "https://saboraki-front-end-mbo3.vercel.app",
+      "http://localhost:3000",
+      "http://127.0.0.1:5500",
+      "http://localhost:5500",
+    ],
     credentials: true,
   }),
 );
@@ -21,7 +27,19 @@ app.use(
 app.use(express.json());
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://saboraki.netlify.app");
+  const allowedOrigins = [
+    "https://saboraki.netlify.app",
+    "https://saboraki-front-end-mbo3.vercel.app",
+    "http://localhost:3000",
+    "http://127.0.0.1:5500",
+    "http://localhost:5500",
+  ];
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
+
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.header("Access-Control-Allow-Credentials", "true");
