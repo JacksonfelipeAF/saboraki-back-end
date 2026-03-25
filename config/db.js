@@ -2,18 +2,17 @@ const mongoose = require("mongoose");
 
 async function conectarDB() {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      ssl: true,
-      sslValidate: false,
-      tls: true,
-      tlsAllowInvalidCertificates: true,
-      serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
-    });
+    if (!process.env.MONGO_URI) {
+      console.error("MONGO_URI não está definida nas variáveis de ambiente");
+      process.exit(1);
+    }
+
+    await mongoose.connect(process.env.MONGO_URI);
 
     console.log("MongoDB conectado 🚀");
   } catch (erro) {
-    console.error("Erro ao conectar MongoDB:", erro);
+    console.error("Erro ao conectar MongoDB:", erro.message);
+    console.error("Verifique se a MONGO_URI está correta no Railway");
     process.exit(1);
   }
 }

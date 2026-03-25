@@ -16,6 +16,7 @@ app.use(
     origin: [
       "https://saboraki.netlify.app",
       "https://saboraki-front-end-mbo3.vercel.app",
+      "https://saboraki-front-end-v82i.vercel.app",
       "http://localhost:3000",
       "http://127.0.0.1:5500",
       "http://localhost:5500",
