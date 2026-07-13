@@ -10,25 +10,23 @@ const usersRoutes = require("../routes/users");
 
 const app = express();
 
-app.use(
-  cors({
-    origin: [
-      "https://saboraki.netlify.app",
-      "https://saboraki-front-end-mbo3.vercel.app",
-      "https://saboraki-front-end-v82i.vercel.app",
-      "https://saboraki-back-787hyjwq2-jacksonfelipeafs-projects.vercel.app",
-      "http://localhost:3000",
-      "http://127.0.0.1:3000",
-      "http://localhost:5500",
-      "http://127.0.0.1:5500",
-      "http://localhost:8080",
-      "http://127.0.0.1:8080",
-    ],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  }),
-);
+app.use(cors({
+  origin: [
+    "https://saboraki.netlify.app",
+    "https://saboraki-front-end-mbo3.vercel.app",
+    "https://saboraki-front-end-v82i.vercel.app",
+    "https://saboraki-back-787hyjwq2-jacksonfelipeafs-projects.vercel.app",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
 
 app.use(express.json());
 
@@ -61,7 +59,4 @@ app.get("/health", (req, res) => {
   res.json({ status: "OK...🚀🚀🚀🚀" });
 });
 
-// Handler para Vercel
-module.exports = (req, res) => {
-  app(req, res);
-};
+module.exports = app;
