@@ -6,8 +6,6 @@ const { Resend } = require("resend");
 
 const autenticarToken = require("../middlewares/autenticarToken");
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 router.post("/enviar-email", autenticarToken, async (req, res) => {
   try {
     console.log("=== INÍCIO DO ENVIO DE EMAIL ===");
@@ -45,6 +43,8 @@ router.post("/enviar-email", autenticarToken, async (req, res) => {
         .status(500)
         .json({ erro: "API Key do Resend não configurada" });
     }
+
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     // GERAR LINHAS DA TABELA
 
